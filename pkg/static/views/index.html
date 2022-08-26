@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset Password User</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css"
+        integrity="sha512-xmGTNt20S0t62wHLmQec2DauG9T+owP9e6VU8GigI0anN7OXLip9i7IwEhelasml2osdxX71XcYm6BQunTQeQg=="
+        crossorigin="anonymous" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+    <style type="text/css">
+        .bootstrap-tagsinput {
+            width: 100%;
+        }
+
+        .label-info {
+            background-color: #17a2b8;
+
+        }
+
+        .label {
+            display: inline-block;
+            padding: .25em .4em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out, background-color .15s ease-in-out,
+                border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <br>
+    <div class="container">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+           
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#cari-user">Cari Username SIA</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Cari User -->
+            <div id="cari-user" class="container tab-pane active"><br>
+                <h5 style="text-align: center;">Cari Username SIA</h5>
+                <center><small>Cari username sia menggunakan <b>nama</b> user</small></center>
+                <div class="col-12 mt-5 mb-5 pb-5 pt-5 shadow">
+                    <div class="card">
+                        <div class="card-body">
+                            <label>Tags :</label>
+                            <input type="text" data-role="tagsinput" name="tags" id="tags4" class="form-control"
+                                placeholder="Input kata kunci nama user">
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-success" id="cek-cari-user">Cari</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 shadow">
+                    <div id="loading4" style="display: none;">
+                        Loading data, please wait...
+                    </div>
+                    <div id="table4" class="col-12">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Email</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody4"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+        integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous">
+        < script src = "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity = "sha256-OFRAJNoaD8L3Br5lglV7VyLRf0itmoBzWUoM+Sji4/8="
+        crossorigin = "anonymous" / >
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"
+        integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg=="
+        crossorigin="anonymous"></script>
+
+    </script>
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Search Username SIA-->
+    <script>
+        $(document).ready(() => {
+            $("#cek-cari-user").on("click", (e) => {
+                e.preventDefault()
+                var t = $("#tags4").tagsinput('items')
+                $("#loading4").css("display", "")
+                $("#table4").css("display", "none")
+                axios({
+                    method: 'post',
+                    url: '/sia/user/search',
+                    data: JSON.stringify(t),
+                    headers: {
+                        "Access-Control-Allow-Origin": "*"
+                    }
+                }).then((response) => {
+                    // console.log(response.data)
+                    if (response.data.code === 404) {
+                        alert(response.data.message)
+                    } else {
+                        $("#loading4").css("display", "none")
+                        $("#table4").css("display", "")
+
+                        let res = response.data.data
+
+                        $("#tbody4").empty()
+                        let row = ''
+
+                        $.each(res, (i, item) => {
+                            var $tr = $('<tr>').append(
+                                $('<tr>'),
+                                $('<td>').text(item.username),
+                                $('<td>').text(item.full_name),
+                                $('<td>').text(item.email),
+                            );
+                            row += $tr.wrap('<p>').html()
+                        })
+                        $("#tbody4").append(row)
+                    }
+
+                }), (error) => {
+                    alert("error: ", error)
+                }
+            })
+        })
+    </script>
+</body>
+
+</html>

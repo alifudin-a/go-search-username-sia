@@ -1,0 +1,6 @@
+.env
+docker-compose.yaml
+github.com/alifudin-a/go-search-username-sia
+bin/github.com/alifudin-a/go-search-username-sia
+bin/go-search-username-sia
+.vscode
